@@ -45,7 +45,7 @@ if(Meteor.isClient) {
     },
     'click .decrement': function() {
       var selectedPlayer = Session.get('selectedPlayer');
-      Meteor.call('modifyPlayerAge', selectedPlayer, 5);
+      Meteor.call('modifyPlayerAge', selectedPlayer, -5);
     },
     'click .remove': function() {
       var selectedPlayer = Session.get('selectedPlayer');
@@ -77,7 +77,7 @@ if(Meteor.isServer) {
     return PlayersList.find({createdBy: currentUserId});
   });
   Meteor.methods({
-    'insertPlayerData': function(playerNamevar) {
+    'insertPlayerData': function(playerNameVar) {
       var currentUserId = Meteor.userId();
       PlayersList.insert({
         name: playerNameVar,

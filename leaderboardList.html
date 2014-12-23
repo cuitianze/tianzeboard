@@ -1,0 +1,18 @@
+<template name='leaderboard'>
+    Hello world <br/>
+  {{player1}} <br/>
+  {{player2}} <br/>
+    <ul class="players">
+        当前人数:{{count}}
+      {{#each player}}
+          <li class="player {{selectedClass}}"> {{name}} : {{age}} </li>
+      {{/each}}
+    </ul>
+  {{#if showSelectedPlayer}}
+      <input type="button" class="increment" value="Give 5 Points"/>
+      <input type="button" class="decrement" value="Take 5 Points"/>
+      <p>Selected Player: {{showSelectedPlayer.name}}</p>
+  {{/if}}
+
+  {{> addPlayerForm}}
+</template>
