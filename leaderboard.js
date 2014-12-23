@@ -40,21 +40,18 @@ if(Meteor.isClient) {
     },
 
     'click .increment': function() {
-      //console.log('1');
       var selectedPlayer = Session.get('selectedPlayer');
-      PlayersList.update(selectedPlayer,{$inc: {age: 5}});
+      Meteor.call('modifyPlayerAge', selectedPlayer, 5);
     },
     'click .decrement': function() {
-      //console.log('1');
       var selectedPlayer = Session.get('selectedPlayer');
-      PlayersList.update(selectedPlayer,{$inc: {age: -5}});
+      Meteor.call('modifyPlayerAge', selectedPlayer, 5);
     },
     'click .remove': function() {
       var selectedPlayer = Session.get('selectedPlayer');
       var removeConfirm = confirm('您真的要删除吗？');
-      if(removeConfirm)
-      {
-        PlayersList.remove(selectedPlayer);
+      if(removeConfirm) {
+        Meteor.call('removePlayerData', selectedPlayer);
       }
     }
 
@@ -64,16 +61,10 @@ if(Meteor.isClient) {
     'submit form': function(event) {
       event.preventDefault();
       var playerNameVar = event.target.playerName.value;
-      var currentUserId = Meteor.userId();
       if(playerNameVar.trim()) {
-        PlayersList.insert({
-          name: playerNameVar,
-          age: 0,
-          createdBy: currentUserId
-        });
-        event.target.playerName.value = '';
+        Meteor.call('insertPlayerData', playerNameVar);
       }
-      Meteor.call('sendLogMessage');
+      event.target.playerName.value = '';
     }
   })
 
@@ -86,8 +77,19 @@ if(Meteor.isServer) {
     return PlayersList.find({createdBy: currentUserId});
   });
   Meteor.methods({
-    'sendLogMessage': function() {
-      console.log("hello world");
+    'insertPlayerData': function(playerNamevar) {
+      var currentUserId = Meteor.userId();
+      PlayersList.insert({
+        name: playerNameVar,
+        age: 0,
+        createdBy: currentUserId
+      });
+    },
+    'removePlayerData': function(selectedPlayer) {
+      PlayersList.remove(selectedPlayer);
+    },
+    'modifyPlayerAge': function(selectedPlayer, value) {
+      PlayersList.update(selectedPlayer,{$inc: {age: value}});
     }
   })
 }
