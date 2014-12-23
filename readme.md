@@ -1,0 +1,1 @@
+remove autopublish insecure
